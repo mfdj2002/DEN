@@ -10,7 +10,8 @@ flags.DEFINE_integer("max_iter", 4300, "Epoch to train")
 flags.DEFINE_float("lr", 0.001, "Learing rate(init) for train")
 flags.DEFINE_integer("batch_size", 256, "The size of batch for 1 iteration")
 flags.DEFINE_string("checkpoint_dir", "checkpoints", "Directory path to save the checkpoints")
-flags.DEFINE_integer("dims", [784, 312, 128, 10], "Dimensions about layers including output")
+#flags.DEFINE_integer("dims", [784, 312, 128, 10], "Dimensions about layers including output")
+flags.DEFINE_string("dims", "784,312,128,10", "Dimensions about layers including output")
 flags.DEFINE_integer("n_classes", 10, 'The number of classes at each task')
 flags.DEFINE_float("l1_lambda", 0.00001, "Sparsity for L1")
 flags.DEFINE_float("l2_lambda", 0.0001, "L2 lambda")
@@ -35,8 +36,9 @@ for task in range(10):
 	trainXs.append(trainX[:, task_permutation[task]])
 	valXs.append(valX[:, task_permutation[task]])
 	testXs.append(testX[:, task_permutation[task]])
+dims = [int(dim) for dim in FLAGS.dims.split(",")]
 
-model = DEN.DEN(FLAGS)
+model = DEN.DEN(dims, FLAGS)
 params = dict()
 avg_perf = []
 
